@@ -28,6 +28,11 @@ public class Drive extends SubsystemBase {
 
   }
 
+  public void turn(double speed) {
+      frontLeft.set(TalonSRXControlMode.PercentOutput, speed);
+      frontRight.set(TalonSRXControlMode.PercentOutput, -speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
