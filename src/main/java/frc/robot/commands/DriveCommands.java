@@ -14,9 +14,15 @@ public class DriveCommands {
     private DriveCommands() {}
 
     public static Command forward(
-            Drive drive
+            Drive drive, DoubleSupplier forward
     ) {
-        return Commands.run(() -> drive.runPercent(1.0), drive);
+        return Commands.run(() -> drive.runPercent(forward.getAsDouble()), drive);
+    }
+
+    public static Command turn(
+            Drive drive, DoubleSupplier turn
+    ) {
+        return Commands.run(() -> drive.runPercent(turn.getAsDouble()), drive);
     }
 
     public static Command stop(
@@ -31,8 +37,8 @@ public class DriveCommands {
             DoubleSupplier turn
     ) {
         return Commands.either(
-                Commands.run(() -> drive.runPercent(speed.getAsDouble()), drive),
-                Commands.run(() -> drive.turn(turn.getAsDouble()), drive),
+                forward(drive, speed),
+                turn(drive, turn),
                 () -> speed.getAsDouble() > turn.getAsDouble());
     }
 }
